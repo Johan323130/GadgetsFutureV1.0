@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <HorizontalScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp">
+
+            <Button
+                android:id="@+id/btnCategorias"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_gravity="bottom|end"
+                android:backgroundTint="#FFFFFF"
+                android:clickable="true"
+                android:padding="10dp"
+                android:text="Añadir al carrito"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:cornerRadius="50sp"
+                app:iconTint="#000000"
+                app:strokeColor="@color/black"
+                app:strokeWidth="1sp" />
+        </LinearLayout>
+    </HorizontalScrollView>
+</LinearLayout>
