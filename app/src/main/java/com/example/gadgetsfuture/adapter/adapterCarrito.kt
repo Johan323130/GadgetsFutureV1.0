@@ -1,9 +1,9 @@
+
 import android.content.Context
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -29,6 +29,8 @@ class adapterCarrito (var context: Context?, var listaCarrito: JSONArray)
         lateinit var lblPrecio: TextView
         lateinit var lblSubtotal: TextView
         lateinit var btnEliminarCarrito: ImageButton
+        lateinit var btnSumar: Button
+        lateinit var btnRestar: Button
 
         init {
             lblNombre = itemView.findViewById(R.id.lblNombreCart)
@@ -37,6 +39,8 @@ class adapterCarrito (var context: Context?, var listaCarrito: JSONArray)
             lblPrecio = itemView.findViewById(R.id.lblPrecioCart)
             lblSubtotal = itemView.findViewById(R.id.lblSubtotalCart)
             btnEliminarCarrito = itemView.findViewById(R.id.btnEliminarCart)
+            btnSumar = itemView.findViewById(R.id.btnSumar)
+            btnRestar = itemView.findViewById(R.id.btnRestar)
         }
     }
 
@@ -64,27 +68,39 @@ class adapterCarrito (var context: Context?, var listaCarrito: JSONArray)
         val formatoSubtotal = formato.format(subtotal)
 
         holder.lblNombre.text = nombre
-        holder.txtCantidad.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
-            override fun afterTextChanged(s: Editable?) {
-                val nuevaCantidad = s?.toString()?.toIntOrNull() ?: 0
-                val idCarrito = carrito.getInt("id")
-                GlobalScope.launch {
-                    //actu(idCarrito, nuevaCantidad)
-                }
-            }
-        })
-
+        holder.txtCantidad.text = cantidad.toString()
         holder.lblPrecio.text = "$formatoPrecio"
         holder.lblSubtotal.text = "$formatoSubtotal"
         Glide.with(holder.itemView.context).load(imagen).into(holder.imgProducto)
+
+        holder.btnSumar.setOnClickListener {
+            sumarCantidad(holder.txtCantidad)
+        }
+
+        holder.btnRestar.setOnClickListener {
+            restarCantidad(holder.txtCantidad)
+        }
 
         holder.btnEliminarCarrito.setOnClickListener {
             val carrito = listaCarrito.getJSONObject(position)
             val idCarrito = carrito.getInt("id")
             eliminarItemDelCarrito(idCarrito)
+        }
+    }
+
+    private fun sumarCantidad(textView: TextView) {
+        var cantidad = textView.text.toString().toIntOrNull() ?: 0
+        cantidad++
+        if (cantidad <= 99) {
+            textView.text = cantidad.toString()
+        }
+    }
+
+    private fun restarCantidad(textView: TextView) {
+        var cantidad = textView.text.toString().toIntOrNull() ?: 0
+        if (cantidad > 1) {
+            cantidad--
+            textView.text = cantidad.toString()
         }
     }
 
