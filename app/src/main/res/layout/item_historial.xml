@@ -33,6 +33,7 @@
                     android:layout_marginTop="15dp">
 
                     <TextView
+                        android:id="@+id/fechaCompra"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="start"
@@ -111,7 +112,7 @@
                             android:id="@+id/cantidadProductos"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0"
+                            android:text="1"
                             android:textSize="20sp"
                             android:textColor="@color/black"
                             android:layout_marginStart="2dp"
@@ -128,6 +129,7 @@
                         android:focusable="true"
                         android:foreground="?android:attr/selectableItemBackground"
                         android:padding="10dp"
+                        android:layout_marginTop="5dp"
                         android:text="Volver a comprar"
                         android:textColor="#000000"
                         android:textSize="12sp"
