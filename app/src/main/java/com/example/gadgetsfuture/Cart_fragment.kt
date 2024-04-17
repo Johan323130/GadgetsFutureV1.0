@@ -147,23 +147,26 @@ class Cart_fragment : Fragment() {
 
     /** Corregir */
     suspend fun eliminarCarrito(id: Int) {
-        //http://192.168.1.10:8000/carrito/api/v1/eliminar_carrito/
-        var url = config.urlCarrito + "v1/eliminar_carrito/"
+        var url = config.urlCarrito + "v1/eliminar_carrito/$id/" //agregar el id a la url
         var queue = Volley.newRequestQueue(activity)
-        val parametro = JSONObject().apply {
+        //comentar o eliminar parametro
+        /*val parametro = JSONObject().apply {
             put("id", id)
-        }
+        }*/
 
         var request = object : JsonObjectRequest(
             Method.DELETE,
             url,
-            parametro,
+            null,
             { response ->
                 val message = response.getString("message")
                 Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
+                peticionMostarCarrito()
             },
             { error ->
-                Toast.makeText(activity, "Error: $error", Toast.LENGTH_LONG).show()
+                var mensajeError = JSONObject(String(error.networkResponse.data))
+                Toast.makeText(activity, "Error al eliminar: ${mensajeError}", Toast.LENGTH_LONG)
+                    .show()
             }
         ) {
             override fun getHeaders(): MutableMap<String, String> {
@@ -261,15 +264,15 @@ class Cart_fragment : Fragment() {
         recyclerCarrito.layoutManager = LinearLayoutManager(activity)
         var adapter = adapterCarrito(activity, listaCarrito)
 
-        /*adapter.onclick = { carrito ->
-            var idCart = carrito.getInt("id")
-            var canti = carrito.getInt("cantidad")
+        adapter.onclickEliminar = { carrito ->
+            var idCart = carrito.getInt("id_producto")
             //idCarrito = carrito.getInt("id")
-            //cantidad = carrito.getInt("cantidad")
 
-            /*GlobalScope.launch {
+            GlobalScope.launch {
                 try {
                     eliminarCarrito(idCart)
+
+
                 } catch (error: Exception) {
                     Toast.makeText(
                         activity,
@@ -277,69 +280,10 @@ class Cart_fragment : Fragment() {
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-            }*/
-
-            /*btnActualizar.setOnClickListener {
-                GlobalScope.launch {
-                    try {
-                        actualizarCarrito(idCart, canti)
-                    } catch (error: Exception) {
-                        Toast.makeText(
-                            activity,
-                            "Error en la petición: {$error}",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-            }*/
-
-        }*/
-        //adapter.notifyDataSetChanged()
+            }
+            //adapter.notifyDataSetChanged()
+        }
         recyclerCarrito.adapter = adapter
+
     }
 }
-
-    /*fun cargarListaCarrito(listaCarrito: JSONArray){
-        recyclerCarrito.layoutManager= LinearLayoutManager(activity)
-        var adapter= com.example.gadgetsfuture.adapterCarrito(activity, listaCarrito)
-        adapter.onclick={carrito ->
-            idCarrito=carrito.getInt("id")
-            cantidad=carrito.getInt("cantidad")
-
-            /*val bundle=Bundle().apply {
-                putInt("idCarrito", idCarrito)
-            }*/
-
-            /*GlobalScope.launch {
-                    try {
-                        actualizarCarrito(idCarrito, cantidad)
-                    } catch (error: Exception)    {
-                        Toast.makeText(activity, "Error en la petición: {$error}", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            */
-
-            /*GlobalScope.launch {
-             try {
-                 eliminarCarrito(idCarrito)
-                 //val intent = Intent(activity, Cart_fragment::class.java)
-                 //startActivity(intent)
-             } catch (error: Exception)    {
-                 Toast.makeText(activity, "Error en la petición: {$error}", Toast.LENGTH_SHORT).show()
-             }
-         }*/
-
-        }
-        recyclerCarrito.adapter=adapter
-    }*/
-
-    /*adapter.onclick= {
-           val bundle=Bundle()
-           bundle.putInt("id_carrito",it.getInt("id"))
-           val transaction=requireFragmentManager().beginTransaction()
-           var fragmento=detalle_producto()
-           fragmento.arguments=bundle
-           transaction.replace(R.id.container, fragmento).commit()
-           transaction.addToBackStack(null)
-       }*/
-

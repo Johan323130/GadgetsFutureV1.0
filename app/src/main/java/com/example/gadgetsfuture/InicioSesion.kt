@@ -128,7 +128,7 @@ class InicioSesion : AppCompatActivity() {
         queue.add(request)
 
         while (peticion == false){
-            delay(500)
+            delay(100)
         }
         return inicioExitoso
     }

@@ -160,6 +160,15 @@ class Home_fragment : Fragment() {
             fragmento.arguments=bundle
             transaction.replace(R.id.container, fragmento)
             transaction.addToBackStack(null)
+            transaction.commit()
+        }
+        adapter.onClickCar= {producto ->
+            val productoId = producto.getInt("id")
+            val transaction=requireFragmentManager().beginTransaction()
+            var fragmento=Cart_fragment()
+
+            transaction.replace(R.id.container, fragmento)
+            transaction.addToBackStack(null)
             GlobalScope.launch {
                 try {
                     agregarCarrito(productoId)

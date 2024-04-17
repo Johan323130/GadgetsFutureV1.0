@@ -39,7 +39,7 @@ class UserFragment : Fragment() {
         cardCerrarSesion = view.findViewById(R.id.cardCerrarSesion)
         cardSuspender = view.findViewById(R.id.cardSuspender)
         cardContacto = view.findViewById(R.id.cardContacto)
-        url = "https://wa.link/40y4dh"
+        url = "https://w.app/GadgetsFuture"
 
         cardEditarDatos.setOnClickListener {
             val edit = Intent(requireContext(), Editar_datos::class.java)
@@ -184,7 +184,7 @@ class UserFragment : Fragment() {
                 val headers = HashMap<String, String>()
                 // Obtener el token JWT de tu configuración y agregarlo a los encabezados
                 if (config.token.isNotEmpty()) {
-                    headers["Authorization"] = "Bearer $config.token"
+                    headers["Authorization"] = "Bearer "+config.token
                 }
                 return headers
             }

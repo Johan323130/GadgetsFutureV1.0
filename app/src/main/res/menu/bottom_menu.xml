@@ -11,7 +11,7 @@
 
     <item
         android:id="@+id/cart"
-        android:title="Cart"
+        android:title="Carrito"
         android:icon="@drawable/baseline_shopping_cart_24"
         >
 
@@ -19,7 +19,7 @@
 
     <item
         android:id="@+id/store"
-        android:title="Store"
+        android:title="Categorías"
         android:icon="@drawable/baseline_storefront_24"
         >
 
@@ -28,7 +28,7 @@
 
     <item
         android:id="@+id/user"
-        android:title="User"
+        android:title="Usuario"
         android:icon="@drawable/baseline_person_24"
         >
     </item>

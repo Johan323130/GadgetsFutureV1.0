@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -19,6 +20,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.json.JSONException
+import org.json.JSONObject
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -36,7 +38,7 @@ class detalle_producto : Fragment() {
 
     private lateinit var view: View
     private var id_producto: Int = 0
-
+    lateinit var btnDetalleAggCarrito: Button
     lateinit var lblNombre: TextView
     lateinit var lblPrecio: TextView
     lateinit var imgProducto: ImageView
@@ -70,6 +72,26 @@ class detalle_producto : Fragment() {
         lblPrecio=view.findViewById(R.id.lblPrecioDetalleProducto)
         imgProducto=view.findViewById(R.id.imgDetalleProducto)
         lbldescripcion=view.findViewById(R.id.lblDetalleDescripcion)
+        btnDetalleAggCarrito= view.findViewById(R.id.btnDetalleAggCarrito)
+        btnDetalleAggCarrito.setOnClickListener{
+            val productoId = id_producto
+            val transaction=requireFragmentManager().beginTransaction()
+            var fragmento=Cart_fragment()
+
+            transaction.replace(R.id.container, fragmento)
+            transaction.addToBackStack(null)
+            GlobalScope.launch {
+                try {
+                    agregarCarrito(productoId)
+                    // Corregir
+                    //val intent = Intent(activity, Cart_fragment::class.java)
+                    //startActivity(intent)
+                } catch (error: Exception)    {
+                    Toast.makeText(activity, "Error en la petición: {$error}", Toast.LENGTH_SHORT).show()
+                }
+            }
+            transaction.commit()
+        }
 
         GlobalScope.launch(Dispatchers.Main) {
             try {
@@ -78,6 +100,7 @@ class detalle_producto : Fragment() {
                 Toast.makeText(activity, "Error en la petición: {$error}", Toast.LENGTH_SHORT).show()
             }
         }
+
 
         return view
     }
@@ -126,5 +149,34 @@ class detalle_producto : Fragment() {
             }
         )
         queue.add(request)
+    }
+
+    suspend fun agregarCarrito(id:Int){
+        var url = config.urlCarrito+"v1/agregar_carrito/"
+        var queue= Volley.newRequestQueue(activity)
+        val parametro = JSONObject().apply {
+            put("id", id)
+        }
+        val request = object : JsonObjectRequest(
+            Method.POST,
+            url,
+            parametro,
+            {response ->
+                Toast.makeText(activity, "Se agrego el producto", Toast.LENGTH_LONG).show()
+            },
+            {error ->
+                Toast.makeText(activity, "Error $error", Toast.LENGTH_LONG).show()
+            }
+        ) {
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+                if (config.token.isNotEmpty()) {
+                    headers["Authorization"] = "Bearer ${config.token}"
+                }
+                return headers
+            }
+        }
+        queue.add(request)
+
     }
 }

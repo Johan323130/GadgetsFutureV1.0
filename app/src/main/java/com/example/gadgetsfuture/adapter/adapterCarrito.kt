@@ -1,4 +1,3 @@
-
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +15,7 @@ import com.example.gadgetsfuture.config.config
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.json.JSONArray
+import org.json.JSONObject
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -23,14 +23,14 @@ class adapterCarrito (var context: Context?, var listaCarrito: JSONArray)
     : RecyclerView.Adapter<adapterCarrito.MyHolder>() {
 
     inner class MyHolder(Item: View) : RecyclerView.ViewHolder(Item) {
-        lateinit var lblNombre: TextView
-        lateinit var imgProducto: ImageView
-        lateinit var txtCantidad: TextView
-        lateinit var lblPrecio: TextView
-        lateinit var lblSubtotal: TextView
-        lateinit var btnEliminarCarrito: ImageButton
-        lateinit var btnSumar: Button
-        lateinit var btnRestar: Button
+        var lblNombre: TextView
+        var imgProducto: ImageView
+        var txtCantidad: TextView
+        var lblPrecio: TextView
+        var lblSubtotal: TextView
+        var btnEliminarCarrito: ImageButton
+        var btnSumar: Button
+        var btnRestar: Button
 
         init {
             lblNombre = itemView.findViewById(R.id.lblNombreCart)
@@ -58,6 +58,7 @@ class adapterCarrito (var context: Context?, var listaCarrito: JSONArray)
         val precio = carrito.getDouble("precio")
         var subtotal = cantidad * precio
 
+
         if (nombre.length >= 40) {
             nombre = nombre.substring(0, 39) + "..."
         }
@@ -84,6 +85,7 @@ class adapterCarrito (var context: Context?, var listaCarrito: JSONArray)
         holder.btnEliminarCarrito.setOnClickListener {
             val carrito = listaCarrito.getJSONObject(position)
             val idCarrito = carrito.getInt("id")
+            onclickEliminar?.invoke(carrito)
             eliminarItemDelCarrito(idCarrito)
         }
     }
@@ -104,10 +106,13 @@ class adapterCarrito (var context: Context?, var listaCarrito: JSONArray)
         }
     }
 
+    var onclickEliminar:((JSONObject)->Unit)?=null
     private fun eliminarItemDelCarrito(id: Int) {
         GlobalScope.launch {
             try {
+
                 (context as? Cart_fragment)?.eliminarCarrito(id)
+
             } catch (error: Exception) {
                 Toast.makeText(context, "Error en la petición: $error", Toast.LENGTH_SHORT).show()
             }

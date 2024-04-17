@@ -10,8 +10,8 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         startActivity(Intent(this, InicioSesion::class.java))
         this@SplashActivity.overridePendingTransition(
-            R.anim.animate_slide_left_enter,
-            R.anim.animate_slide_left_exit
+            R.anim.animate_fade_enter,
+            R.anim.animate_fade_exit
         )
     }
 
